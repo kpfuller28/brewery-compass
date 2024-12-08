@@ -1,8 +1,12 @@
 from app import create_app, routes
+from app.db import db
 from flask import g, current_app, request, redirect, session
 
 
 app = create_app()
+with app.app_context():
+  from app.models import User
+  db.create_all()
 
 @app.before_request
 def before_request():

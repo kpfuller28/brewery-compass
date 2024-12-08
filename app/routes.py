@@ -22,8 +22,5 @@ def logout():
 
 @routes.route('/dashboard')
 def dashboard():
-  payload = {'by_city': 'san_diego', 'per_page': '3'}
-  test = requests.get(g.url, params=payload)
-  print(test.text)
   return render_template('index.html')
 
