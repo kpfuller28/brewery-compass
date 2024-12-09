@@ -11,7 +11,7 @@ with app.app_context():
 @app.before_request
 def before_request():
   g.url = current_app.config['API_URL']
-  if not session.get('loggedIn') and request.path != '/login':
+  if not session.get('loggedIn') and (request.path != '/login' and request.path != '/register'):
     return redirect('/login')
 
 app.register_blueprint(routes.routes)

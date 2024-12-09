@@ -6,8 +6,26 @@
 </head>
 <body>
     <h1>Login Page!</h1>
-    <form action="/login" method="post">
-      <input type="submit" value="Log In"/>
-    </form>
+    <p><bold>Disclaimer: </bold>This site is not actually secure. Like, at all. Please do not input any real usernames or passwords.</p>
+    <div style="display: flex;">
+      <form style='flex: 5%;' action="/login" method="post">
+        <h2>Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Username..." required/><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Password..." required/>
+        <input type="submit" value="Log In"/><br><br>
+        <p>{{login_error}}</p>
+      </form>
+      <form style='flex: 50%;' action="/register" method="post">
+        <h2>Register</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Username..." required/><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Password..." required/>
+        <input type="submit" value="Register"/><br>
+        <p>{{register_error}}</p>
+      </form>
+    </div>
 </body>
 </html>

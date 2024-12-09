@@ -5,9 +5,65 @@
     <title>Brewery Compass</title>
 </head>
 <body>
-    <h1>Welcome to Your Brewery Compass!</h1>
-    <form action="/logout" method="post">
+  <div style="display: flex;">
+
+    <h1 style="flex: auto; width: auto;">Welcome to Your Brewery Compass {{user.username}}!</h1>
+    <form style="flex: auto;" action="/logout" method="post">
       <input type="submit" value="Log Out"/>
     </form>
+  </div>
+    <div style="display: flex;">
+      <div style="flex: 5%;">
+        <h2>
+          Explored
+        </h2>
+        <br><br>
+        {% if explored %}
+        {% else %}
+          <div>
+            No Brewries Explored Yet!
+          </div>
+        {% endif %}
+      </div>
+      <div style="flex: 10%;">
+        <h2>
+          My Radar
+        </h2>
+        <br><br>
+        {% if radar %}
+        {% else %}
+          <div>
+            No Brewries On Your Radar Yet!
+          </div>
+        {% endif %}
+      </div>
+      <div  style="flex: 50%;" >
+        <form action="/search" method="post">
+          <input type="text"  id="search" name="search" placeholder="Search for breweries..."/>
+          <input type="submit" value="Search"/>
+        </form>
+        {% if breweries %}
+          {% for brewery in breweries %}
+          <div>
+            {% if brewery.website_url == None %}
+              <h5>{{brewery.name}}</h5>
+            {% else %}
+              <h5><a href="{{brewery.website_url}}" target="_blank" rel="noopener noreferrer">{{brewery.name}}</a></h5>
+            {% endif %}
+            <form action="/addExplored" method="post">
+              <input type="submit" value="Add to Explored"/>
+            </form>
+            <form action="/addRadar" method="post">
+              <input type="submit" value="Add to Your Radar"/>
+            </form>
+            <p>{{brewery['address_1']}}</p>
+            <p>{{brewery.city}}, {{brewery.state_province}}</p>
+          </div>
+          {% endfor %}
+        {% else %}
+          <h2>No breweries found :( Try a different search</h2>
+        {% endif %}
+      </div>
+    </div>
 </body>
 </html>
