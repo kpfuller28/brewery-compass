@@ -19,8 +19,25 @@
         </h2>
         <br><br>
         {% if explored %}
-          {% for brewery in explored %}
-            <div>{{brewery.name}}</div>
+        {% for brewery in explored %}
+        <div>
+          {% if brewery.website == None %}
+          <h5>{{brewery.name}}</h5>
+          {% else %}
+          <h5><a href="{{brewery.website}}" target="_blank" rel="noopener noreferrer">{{brewery.name}}</a></h5>
+          {% endif %}
+          <form action="/move" method="post">
+            <input type="submit" value="Move to Radar"/>
+            <input type="hidden" name="id" value="{{brewery.brewery_id}}"/>
+            <input type="hidden" name="type" value="{{brewery.list_type}}"/>
+            </form>
+            <form action="/delete" method="post">
+              <input type="submit" value="Delete Brewery"/>
+              <input type="hidden" name="id" value="{{brewery.brewery_id}}"/>
+            </form>
+            <p>{{brewery.address}}</p>
+            <p>{{brewery.city}}, {{brewery.state_province}}</p>
+          </div>
           {% endfor %}
         {% else %}
           <div>
@@ -34,6 +51,26 @@
         </h2>
         <br><br>
         {% if radar %}
+          {% for brewery in radar %}
+          <div>
+            {% if brewery.website == None %}
+              <h5>{{brewery.name}}</h5>
+            {% else %}
+              <h5><a href="{{brewery.website}}" target="_blank" rel="noopener noreferrer">{{brewery.name}}</a></h5>
+            {% endif %}
+            <form action="/move" method="post">
+              <input type="submit" value="Move to Explored"/>
+              <input type="hidden" name="id" value="{{brewery.brewery_id}}"/>
+              <input type="hidden" name="type" value="{{brewery.list_type}}"/>
+            </form>
+            <form action="/delete" method="post">
+              <input type="submit" value="Delete Brewery"/>
+              <input type="hidden" name="id" value="{{brewery.brewery_id}}"/>
+            </form>
+            <p>{{brewery.address}}</p>
+            <p>{{brewery.city}}, {{brewery.state_province}}</p>
+          </div>
+          {% endfor %}
         {% else %}
           <div>
             No Brewries On Your Radar Yet!
@@ -45,6 +82,9 @@
           <input type="text"  id="search" name="search" placeholder="Search for breweries..."/>
           <input type="submit" value="Search"/>
         </form>
+        {% if error %}
+          <p>{{error}}</p>
+        {% endif %}
         {% if breweries == None %}
         {% elif breweries|length > 0 %}
           {% for brewery in breweries %}
@@ -56,11 +96,11 @@
             {% endif %}
             <form action="/addExplored" method="post">
               <input type="submit" value="Add to Explored"/>
-              <input type="hidden" name="id" value="{{brewery.id}}"/>
+              <input type="hidden" name="brewery" value="{{brewery}}"/>
             </form>
             <form action="/addRadar" method="post">
               <input type="submit" value="Add to Your Radar"/>
-              <input type="hidden" name="id" value="{{brewery.id}}"/>
+              <input type="hidden" name="brewery" value="{{brewery}}"/>
             </form>
             <p>{{brewery['address_1']}}</p>
             <p>{{brewery.city}}, {{brewery.state_province}}</p>

@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, g, request, redirect, session
 from .db import db
-from .models import User, Explored, Radar
+from .models import User, Saved
 import requests
 
 
@@ -44,7 +44,7 @@ def login():
 
 @routes.route('/logout', methods=['POST'])
 def logout():
-  session['loggedIn'] =  False
+  session.clear()
   return redirect('/')
 
 @routes.route('/search', methods=['POST'])
@@ -54,39 +54,54 @@ def search():
 
 @routes.route('/addExplored', methods= ['POST'])
 def addExplored():
-  try:
-    explored_brewery = Explored(brewery_id=request.form['id'], user_id=session['current_user']['id'])
-    db.session.add(explored_brewery)
-    db.session.commit()
-  except Exception as error:
-    print(f'Error adding brewery to Explored list: {error}')
-    return redirect('/dashboard')
-
-  print('Brewery added to Explored')
-  return redirect(f'/dashboard')
-
+  from .helpers import addSaved
+  return addSaved(request.form['brewery'], 'explored')
 
 @routes.route('/addRadar', methods=['POST'])
 def addRadar():
-  print('Brewery added to Your Radar')
+  from .helpers import addSaved
+  return addSaved(request.form['brewery'], 'radar')
+
+@routes.route('/move', methods=['POST'])
+def move():
+  brewery = Saved.query.filter_by(brewery_id=request.form['id']).one()
+  if request.form['type'] == 'explored':
+    brewery.list_type = 'radar'
+    db.session.commit()
+  else:
+    brewery.list_type = 'explored'
+    db.session.commit()
+  return redirect('/dashboard')
+
+@routes.route('/delete', methods=['POST'])
+def delete():
+  brewery = Saved.query.filter_by(brewery_id=request.form['id']).one()
+  db.session.delete(brewery)
+  db.session.commit()
   return redirect('/dashboard')
 
 @routes.route('/dashboard')
 def dashboard():
   search_terms = request.args.get('search')
-  breweries = []
-  radar = []
 
-  if search_terms:
+  if search_terms != None:
     payload = {'query': search_terms}
     response = requests.get(g.url + '/search', params=payload)
     breweries = response.json() if response.status_code == 200 else []
+    session['search'] = payload
+  elif session.get('search'):
+    response = requests.get(g.url + '/search', params=session['search'])
+    breweries = response.json() if response.status_code == 200 else []
   else:
-    explored = []
-    explored_results = Explored.query.filter_by(user_id=session['current_user']['id']).all()
-    for brewery in explored_results:
-      r = requests.get(g.url + '/' + brewery.brewery_id)
-      explored.append(r.json()) if r.status_code == 200 else []
-      print(explored)
-  return render_template('index.html', user=session['current_user'], breweries=breweries, explored=explored)
+    breweries = None
+
+  explored = Saved.query.filter_by(user_id=session['current_user']['id'], list_type='explored').all()
+  radar = Saved.query.filter_by(user_id=session['current_user']['id'], list_type='radar').all()
+  if session.get('db_error'):
+    error = session.pop('db_error')
+  else:
+    error = None
+
+
+  return render_template('index.html', user=session['current_user'], breweries=breweries, explored=explored, radar=radar, error=error)
 

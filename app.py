@@ -10,7 +10,8 @@ from flask import g, current_app, request, redirect, session
 
 app = create_app()
 with app.app_context():
-  from app.models import User
+  from app.models import User, Saved
+  db.drop_all()
   db.create_all()
 
 @app.before_request
