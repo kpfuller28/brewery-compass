@@ -19,6 +19,9 @@
         </h2>
         <br><br>
         {% if explored %}
+          {% for brewery in explored %}
+            <div>{{brewery.name}}</div>
+          {% endfor %}
         {% else %}
           <div>
             No Brewries Explored Yet!
@@ -42,7 +45,8 @@
           <input type="text"  id="search" name="search" placeholder="Search for breweries..."/>
           <input type="submit" value="Search"/>
         </form>
-        {% if breweries %}
+        {% if breweries == None %}
+        {% elif breweries|length > 0 %}
           {% for brewery in breweries %}
           <div>
             {% if brewery.website_url == None %}
@@ -52,9 +56,11 @@
             {% endif %}
             <form action="/addExplored" method="post">
               <input type="submit" value="Add to Explored"/>
+              <input type="hidden" name="id" value="{{brewery.id}}"/>
             </form>
             <form action="/addRadar" method="post">
               <input type="submit" value="Add to Your Radar"/>
+              <input type="hidden" name="id" value="{{brewery.id}}"/>
             </form>
             <p>{{brewery['address_1']}}</p>
             <p>{{brewery.city}}, {{brewery.state_province}}</p>

@@ -2,6 +2,11 @@ from app import create_app, routes
 from app.db import db
 from flask import g, current_app, request, redirect, session
 
+# to do: refactor explored model to include all information needed.
+# user rating, name, address, coordinates, url, etc?. this way the
+# api doesn't need to be hit every time dashboard loads,
+# instead i hit the db. Possibly add alembic to handle db migrations?
+# might not be necessary though.
 
 app = create_app()
 with app.app_context():
