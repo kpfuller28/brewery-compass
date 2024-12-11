@@ -67,10 +67,18 @@ def move():
   brewery = Saved.query.filter_by(brewery_id=request.form['id']).one()
   if request.form['type'] == 'explored':
     brewery.list_type = 'radar'
+    brewery.rating = 0
     db.session.commit()
   else:
     brewery.list_type = 'explored'
     db.session.commit()
+  return redirect('/dashboard')
+
+@routes.route('/rate', methods=['POST'])
+def rate():
+  brewery = Saved.query.filter_by(brewery_id=request.form['id']).one()
+  brewery.rating = request.form['rating']
+  db.session.commit()
   return redirect('/dashboard')
 
 @routes.route('/delete', methods=['POST'])
@@ -95,7 +103,7 @@ def dashboard():
   else:
     breweries = None
 
-  explored = Saved.query.filter_by(user_id=session['current_user']['id'], list_type='explored').all()
+  explored = Saved.query.filter_by(user_id=session['current_user']['id'], list_type='explored').order_by(Saved.rating.desc()).all()
   radar = Saved.query.filter_by(user_id=session['current_user']['id'], list_type='radar').all()
   if session.get('db_error'):
     error = session.pop('db_error')

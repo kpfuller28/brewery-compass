@@ -20,3 +20,4 @@ class Saved(db.Model):
   phone = db.Column(db.String(80))
   website = db.Column(db.String(80))
   list_type = db.Column(db.String(20))
+  rating = db.Column(db.Integer, default=0)

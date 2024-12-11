@@ -6,7 +6,6 @@
 </head>
 <body>
   <div style="display: flex;">
-
     <h1 style="flex: auto; width: auto;">Welcome to Your Brewery Compass {{user.username}}!</h1>
     <form style="flex: auto;" action="/logout" method="post">
       <input type="submit" value="Log Out"/>
@@ -17,27 +16,41 @@
         <h2>
           Explored
         </h2>
-        <br><br>
         {% if explored %}
         {% for brewery in explored %}
-        <div>
+        <div style="border-style: solid; border-width: thin; margin: 5px; padding: 5px;">
           {% if brewery.website == None %}
           <h5>{{brewery.name}}</h5>
           {% else %}
           <h5><a href="{{brewery.website}}" target="_blank" rel="noopener noreferrer">{{brewery.name}}</a></h5>
           {% endif %}
+          {% if brewery.address %}
+          <p>{{brewery.address}}</p>
+          {% else %}
+          <p>No address listed.</p>
+          {% endif %}
+          <p>{{brewery.city}}, {{brewery.state_province}}</p>
           <form action="/move" method="post">
-            <input type="submit" value="Move to Radar"/>
+            <input style="margin: 5px;" type="submit" value="Move to Radar"/>
             <input type="hidden" name="id" value="{{brewery.brewery_id}}"/>
             <input type="hidden" name="type" value="{{brewery.list_type}}"/>
             </form>
             <form action="/delete" method="post">
-              <input type="submit" value="Delete Brewery"/>
+              <input style="margin: 5px;" type="submit" value="Delete Brewery"/>
               <input type="hidden" name="id" value="{{brewery.brewery_id}}"/>
             </form>
-            <p>{{brewery.address}}</p>
-            <p>{{brewery.city}}, {{brewery.state_province}}</p>
-          </div>
+            <form action="/rate" method="post">
+              {% if brewery.rating %}
+              <p>My rating: {{brewery.rating}}</p>
+              <input type="number" value="{{brewery.rating}}" min="0" max="10" step=".1" id="rating" name="rating"/>
+              <input type="submit" value="Change Rating"/>
+              {% else %}
+              <input type="number" value="{{brewery.rating}}" min="0" max="10" step=".1" id="rating" name="rating"/>
+              <input type="submit" value="Add Rating"/>
+              {% endif %}
+              <input type="hidden" name="id" value="{{brewery.brewery_id}}"/>
+            </form>
+        </div>
           {% endfor %}
         {% else %}
           <div>
@@ -49,26 +62,29 @@
         <h2>
           My Radar
         </h2>
-        <br><br>
         {% if radar %}
           {% for brewery in radar %}
-          <div>
+          <div style="border-style: solid; border-width: thin; margin: 5px; padding: 5px;">
             {% if brewery.website == None %}
               <h5>{{brewery.name}}</h5>
             {% else %}
               <h5><a href="{{brewery.website}}" target="_blank" rel="noopener noreferrer">{{brewery.name}}</a></h5>
             {% endif %}
+            {% if brewery.address %}
+            <p>{{brewery.address}}</p>
+            {% else %}
+            <p>No address listed.</p>
+            {% endif %}
+            <p>{{brewery.city}}, {{brewery.state_province}}</p>
             <form action="/move" method="post">
-              <input type="submit" value="Move to Explored"/>
+              <input type="submit" style="margin: 5px;" value="Move to Explored"/>
               <input type="hidden" name="id" value="{{brewery.brewery_id}}"/>
               <input type="hidden" name="type" value="{{brewery.list_type}}"/>
             </form>
             <form action="/delete" method="post">
-              <input type="submit" value="Delete Brewery"/>
+              <input style="margin: 5px;" type="submit" value="Delete Brewery"/>
               <input type="hidden" name="id" value="{{brewery.brewery_id}}"/>
             </form>
-            <p>{{brewery.address}}</p>
-            <p>{{brewery.city}}, {{brewery.state_province}}</p>
           </div>
           {% endfor %}
         {% else %}
@@ -77,7 +93,7 @@
           </div>
         {% endif %}
       </div>
-      <div  style="flex: 50%;" >
+      <div  style="flex: 10%;" >
         <form action="/search" method="post">
           <input type="text"  id="search" name="search" placeholder="Search for breweries..."/>
           <input type="submit" value="Search"/>
@@ -88,22 +104,26 @@
         {% if breweries == None %}
         {% elif breweries|length > 0 %}
           {% for brewery in breweries %}
-          <div>
+          <div style="border-style: solid; border-width: thin; margin: 5px; padding: 5px;">
             {% if brewery.website_url == None %}
               <h5>{{brewery.name}}</h5>
             {% else %}
               <h5><a href="{{brewery.website_url}}" target="_blank" rel="noopener noreferrer">{{brewery.name}}</a></h5>
             {% endif %}
+            {% if brewery.address_1 %}
+            <p>{{brewery.address_1}}</p>
+            {% else %}
+            <p>No address listed.</p>
+            {% endif %}
+            <p>{{brewery.city}}, {{brewery.state_province}}</p>
             <form action="/addExplored" method="post">
-              <input type="submit" value="Add to Explored"/>
+              <input style="margin: 5px;" type="submit" value="Add to Explored"/>
               <input type="hidden" name="brewery" value="{{brewery}}"/>
             </form>
             <form action="/addRadar" method="post">
-              <input type="submit" value="Add to Your Radar"/>
+              <input style="margin: 5px;" type="submit" value="Add to Your Radar"/>
               <input type="hidden" name="brewery" value="{{brewery}}"/>
             </form>
-            <p>{{brewery['address_1']}}</p>
-            <p>{{brewery.city}}, {{brewery.state_province}}</p>
           </div>
           {% endfor %}
         {% else %}
