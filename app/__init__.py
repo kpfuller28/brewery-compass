@@ -13,6 +13,7 @@ def create_app():
   app.config['API_URL'] = os.getenv('API_URL')
   app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URI')
   print('--------------------------------------------')
+  print(os.name)
   print(app.config['SQLALCHEMY_DATABASE_URI'])
   print('--------------------------------------------')
   db.init_app(app)
