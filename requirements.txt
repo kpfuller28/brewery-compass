@@ -1,6 +1,5 @@
-python==3.8
 Flask==2.3.3
 Flask-SQLAlchemy==3.0.5
 requests==2.31.0
 SQLAlchemy==2.0.20
-python-dotenv
+python-dotenv==0.21.0
