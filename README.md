@@ -9,8 +9,9 @@ Brewery Compass is a Flask app for brewery and cidery enthusiasts. Search for br
      ```bash
      git clone <repository-url>
      ```
+2. **Make Sure You have Python Installed on Your System**
 
-2. **Install Dependencies**:
+3. **Install Dependencies**:
    - Navigate to the project directory:
      ```bash
      cd brewery-compass
@@ -20,7 +21,7 @@ Brewery Compass is a Flask app for brewery and cidery enthusiasts. Search for br
      pip install -r requirements.txt
      ```
 
-3. **Setup Environment Variables**:
+4. **Setup Environment Variables**:
    - Create a `.env` file in the root of your project directory:
      ```bash
      touch .env
@@ -32,11 +33,11 @@ Brewery Compass is a Flask app for brewery and cidery enthusiasts. Search for br
      SECRET_KEY='your-secret-key'               # A random string for secure sessions
      ```
 
-4. **Run the Application**:
+5. **Run the Application**:
    - Run the application using:
      ```bash
      python app.py
      ```
 
-5. **Access the App**:
+6. **Access the App**:
    - Open your browser and go to `http://localhost:5000` to view the app.
