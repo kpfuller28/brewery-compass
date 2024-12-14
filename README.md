@@ -38,6 +38,11 @@ Brewery Compass is a Flask app for brewery and cidery enthusiasts. Search for br
      ```bash
      python app.py
      ```
+     or maybe:
+     ```bash
+     python3 app.py
+     ```
+     It depends on your python version
 
 6. **Access the App**:
    - Open your browser and go to `http://localhost:5000` to view the app.
